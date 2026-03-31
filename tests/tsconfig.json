@@ -2,7 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "_/*": ["../tests/*"]
+      "_/*": [
+        "../tests/*"
+      ]
     },
     "rootDir": "..",
     "target": "es5"
