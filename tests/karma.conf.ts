@@ -25,7 +25,10 @@ import {
   ConfigOptions as KarmaConfigOptions
 } from "karma"
 
-import { saucelabs, webpack } from "./config"
+import {
+  saucelabs,
+  webpack
+} from "./config"
 import * as browsers from "./config/browsers/unit.json"
 
 /* ----------------------------------------------------------------------------
@@ -40,8 +43,10 @@ export default (config: KarmaConfig & KarmaConfigOptions) => {
     frameworks: ["webpack", "jasmine"],
 
     /* Include tests */
-    files: [
-      { pattern: "workers/**/*.js", included: false },
+    files: [{
+        pattern: "workers/**/*.js",
+        included: false
+      },
       "suites/**/*.ts"
     ],
 
@@ -60,9 +65,9 @@ export default (config: KarmaConfig & KarmaConfigOptions) => {
     },
 
     /* Reporters */
-    reporters: config.singleRun
-      ? ["spec", "coverage-istanbul"]
-      : ["spec", "clear-screen"],
+    reporters: config.singleRun ?
+      ["spec", "coverage-istanbul"] :
+      ["spec", "clear-screen"],
 
     /* Browsers */
     browsers: ["Chrome"],
@@ -91,9 +96,9 @@ export default (config: KarmaConfig & KarmaConfigOptions) => {
     },
 
     /* Configuration overrides */
-    ...(process.env.GITHUB_ACTIONS || process.env.SAUCE
-      ? saucelabs(config, browsers)
-      : {}
+    ...(process.env.GITHUB_ACTIONS || process.env.SAUCE ?
+      saucelabs(config, browsers) :
+      {}
     )
   })
 }
