@@ -46,7 +46,7 @@ export function postMessage(message: any, origin: string) {
  *
  * @returns Promise returning with no result
  */
-export function importScripts(...urls: string[]): Promise<void> {
+export function importScripts(...urls: string[]): Promise < void > {
   return urls.reduce((promise, url) => (
     promise.then(() => new Promise(resolve => {
       const script = document.createElement("script")
