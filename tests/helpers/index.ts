@@ -20,7 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-import { Chance } from "chance"
+import {
+  Chance
+} from "chance"
 
 /* ----------------------------------------------------------------------------
  * Data
