@@ -20,9 +20,13 @@
  * IN THE SOFTWARE.
  */
 
-import { IFrameWorker } from "worker"
+import {
+  IFrameWorker
+} from "worker"
 
-import { chance } from "_/helpers"
+import {
+  chance
+} from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -53,10 +57,11 @@ describe("worker", () => {
     it("should delegate event handling", () => {
       const worker = new IFrameWorker(chance.url())
       for (const method of [
-        "addEventListener",          /* Add an event listener */
-        "removeEventListener",       /* Remove an event listener */
-        "dispatchEvent"              /* Dispatch an event */
-      ] as const) {
+          "addEventListener", /* Add an event listener */
+          "removeEventListener", /* Remove an event listener */
+          "dispatchEvent" /* Dispatch an event */
+        ] as
+        const) {
         expect(worker[method])
           .toEqual(jasmine.any(Function))
       }
@@ -87,7 +92,9 @@ describe("worker", () => {
     it("should handle worker errors with listener", done => {
       const worker = new IFrameWorker("base/workers/error.js")
       worker.postMessage(chance.string())
-      worker.addEventListener("error", ({ error }) => {
+      worker.addEventListener("error", ({
+        error
+      }) => {
         expect(error.message)
           .toEqual("Error in worker")
         done()
@@ -98,7 +105,9 @@ describe("worker", () => {
     it("should handle worker errors with handler", done => {
       const worker = new IFrameWorker("base/workers/error.js")
       worker.postMessage(chance.string())
-      worker.onerror = ({ error }) => {
+      worker.onerror = ({
+        error
+      }) => {
         expect(error.message)
           .toEqual("Error in worker")
         done()
