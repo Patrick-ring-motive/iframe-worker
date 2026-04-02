@@ -26,8 +26,12 @@ import {
   CustomLauncher
 } from "karma"
 import * as path from "path"
-import { generate } from "project-name-generator"
-import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin"
+import {
+  generate
+} from "project-name-generator"
+import {
+  TsconfigPathsPlugin
+} from "tsconfig-paths-webpack-plugin"
 import {
   Configuration as WebpackConfig,
   RuleSetRule as WebpackRuleSetRule
@@ -46,15 +50,14 @@ import {
  */
 export function webpack(
   config: KarmaConfig & KarmaConfigOptions
-): Partial<WebpackConfig> {
+): Partial < WebpackConfig > {
   delete process.env.TS_NODE_PROJECT
   return {
     mode: "development",
 
     /* Loaders */
     module: {
-      rules: [
-        {
+      rules: [{
           test: /\.ts$/,
           use: {
             loader: "ts-loader",
@@ -68,17 +71,17 @@ export function webpack(
           },
           exclude: /\/node_modules\//
         },
-        ...(config.singleRun
-          ? [
-              ({
-                test: /\.ts$/,
-                use: "istanbul-instrumenter-loader?+esModules",
-                include: path.resolve(__dirname, "../../src"),
-                exclude: path.resolve(__dirname, "../../src/worker/runtime"),
-                enforce: "post"
-              }) as WebpackRuleSetRule
-            ]
-          : []
+        ...(config.singleRun ?
+          [
+            ({
+              test: /\.ts$/,
+              use: "istanbul-instrumenter-loader?+esModules",
+              include: path.resolve(__dirname, "../../src"),
+              exclude: path.resolve(__dirname, "../../src/worker/runtime"),
+              enforce: "post"
+            }) as WebpackRuleSetRule
+          ] :
+          []
         )
       ]
     },
@@ -111,8 +114,8 @@ export function webpack(
  */
 export function saucelabs(
   config: KarmaConfig & KarmaConfigOptions,
-  browsers: Record<string, CustomLauncher>
-): Partial<KarmaConfigOptions> {
+  browsers: Record < string, CustomLauncher >
+): Partial < KarmaConfigOptions > {
   return {
 
     /* Define browsers to run tests on */
@@ -123,17 +126,17 @@ export function saucelabs(
     concurrency: 5,
     sauceLabs: {
       build: process.env.GITHUB_ACTIONS,
-      testName: process.env.GITHUB_RUN_ID
-        ? `${process.env.GITHUB_RUN_ID}`
-        : `~ #${generate().dashed}`,
+      testName: process.env.GITHUB_RUN_ID ?
+        `${process.env.GITHUB_RUN_ID}` :
+        `~ #${generate().dashed}`,
       recordVideo: false,
       recordScreenshots: false
     },
 
     /* Set reporters */
-    reporters: config.singleRun
-      ? ["summary", "coverage-istanbul", "saucelabs"]
-      : ["spec", "clear-screen"],
+    reporters: config.singleRun ?
+      ["summary", "coverage-istanbul", "saucelabs"] :
+      ["spec", "clear-screen"],
     specReporter: {
       suppressErrorSummary: true,
       suppressPassed: !config.singleRun
