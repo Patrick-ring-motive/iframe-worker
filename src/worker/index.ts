@@ -20,7 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import { importScripts, postMessage } from "./runtime"
+import {
+  importScripts,
+  postMessage
+} from "./runtime"
 
 /* ----------------------------------------------------------------------------
  * Class
@@ -52,63 +55,61 @@ export class IFrameWorker implements Worker {
   /**
    * A promise indicating whether the `iframe` was initialized
    */
-  protected r: Promise<unknown>
+  protected r: Promise < unknown >
 
-  /**
-   * Create a new worker from the given URL
-   *
-   * @param url - Worker script URL
-   */
-  public constructor(protected url: string) {
-    const target = new EventTarget()
+    /**
+     * Create a new worker from the given URL
+     *
+     * @param url - Worker script URL
+     */
+    public constructor(protected url: string) {
+      const target = new EventTarget()
 
-    /* Delegate event handling to internal target */
-    this.addEventListener    = target.addEventListener.bind(target)
-    this.removeEventListener = target.removeEventListener.bind(target)
-    this.dispatchEvent       = target.dispatchEvent.bind(target)
+      /* Delegate event handling to internal target */
+      this.addEventListener = target.addEventListener.bind(target)
+      this.removeEventListener = target.removeEventListener.bind(target)
+      this.dispatchEvent = target.dispatchEvent.bind(target)
 
-    /* Create iframe to host the worker script */
-    const iframe = document.createElement("iframe")
-    iframe.width = iframe.height = iframe.frameBorder = "0"
-    
-    /* Tells browsers to treat iframe as if from another origin */
-    iframe.setAttribute('sandbox','allow-scripts');
-    
-    
+      /* Create iframe to host the worker script */
+      const iframe = document.createElement("iframe")
+      iframe.width = iframe.height = iframe.frameBorder = "0"
 
-    /* Initialize runtime and worker script */
-    /* Encode the iframe page into a data URI */
-    const dataUri = "data:text/html;base64," + 
-    btoa(
-      "<html>" +
-        "<body>" +
+      /* Tells browsers to treat iframe as if from another origin */
+      iframe.setAttribute('sandbox', 'allow-scripts');
+
+      /* Initialize runtime and worker script */
+      /* Encode the iframe page into a data URI */
+      const dataUri = "data:text/html;base64," +
+        btoa(
+          "<html>" +
+          "<body>" +
           "<script>" +
-            `postMessage=${postMessage};` +
-            `importScripts=${importScripts};` +
-            "addEventListener(\"error\",ev=>{" +
-              "parent.dispatchEvent(new ErrorEvent(\"error\",{" +
-                `filename:"${url}",` +
-                "error:ev.error" +
-              "}))" +
-            "})" +
+          `postMessage=${postMessage};` +
+          `importScripts=${importScripts};` +
+          "addEventListener(\"error\",ev=>{" +
+          "parent.dispatchEvent(new ErrorEvent(\"error\",{" +
+          `filename:"${url}",` +
+          "error:ev.error" +
+          "}))" +
+          "})" +
           "</script>" +
           `<script src="${url}?${+Date.now()}"></script>` +
-        "</body>" +
-      "</html>"
-    );
-    
-    iframe.src=dataUri;
-  
-    document.body.appendChild(this.iframe = iframe);
-    
-    /* Register internal listeners and track iframe state */
-    window.onmessage = this.m
-    window.onerror = this.e as OnErrorEventHandler
-    this.r = new Promise((resolve, reject) => {
-      this.w.onload = resolve
-      this.w.onerror = reject
-    })
-  }
+          "</body>" +
+          "</html>"
+        );
+
+      iframe.src = dataUri;
+
+      document.body.appendChild(this.iframe = iframe);
+
+      /* Register internal listeners and track iframe state */
+      window.onmessage = this.m
+      window.onerror = this.e as OnErrorEventHandler
+      this.r = new Promise((resolve, reject) => {
+        this.w.onload = resolve
+        this.w.onerror = reject
+      })
+    }
 
   /**
    * Immediately terminate the worker
@@ -130,7 +131,9 @@ export class IFrameWorker implements Worker {
       .catch()
       .then(() => {
         this.w.dispatchEvent(
-          new MessageEvent("message", { data })
+          new MessageEvent("message", {
+            data
+          })
         )
       })
   }
@@ -155,7 +158,9 @@ export class IFrameWorker implements Worker {
   protected m = (ev: MessageEvent): void => {
     if (ev.source === this.w) {
       ev.stopImmediatePropagation()
-      this.dispatchEvent(new MessageEvent("message", { data: ev.data }))
+      this.dispatchEvent(new MessageEvent("message", {
+        data: ev.data
+      }))
       if (this.onmessage)
         this.onmessage(ev)
     }
@@ -171,14 +176,18 @@ export class IFrameWorker implements Worker {
    * @param error - Error object
    */
   protected e = (
-    message?: string, filename?: string,
-    lineno?: number, colno?: number,
-    error?: Error
+    message ? : string, filename ? : string,
+    lineno ? : number, colno ? : number,
+    error ? : Error
   ): void => {
     /* istanbul ignore else: will terminate jasmine */
     if (filename === this.url.toString()) {
       const ev = new ErrorEvent("error", {
-        message, filename, lineno, colno, error
+        message,
+        filename,
+        lineno,
+        colno,
+        error
       })
       this.dispatchEvent(ev)
       if (this.onerror)
