@@ -20,7 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-import { IFrameWorker } from "../worker"
+import {
+  IFrameWorker
+} from "../worker"
 
 /* ----------------------------------------------------------------------------
  * Types
