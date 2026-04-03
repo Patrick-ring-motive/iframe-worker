@@ -65,9 +65,7 @@ export default (config: KarmaConfig & KarmaConfigOptions) => {
     },
 
     /* Reporters */
-    reporters: config.singleRun ?
-      ["spec", "coverage-istanbul"] :
-      ["spec", "clear-screen"],
+    reporters: config.singleRun ? ["spec", "coverage-istanbul"] : ["spec", "clear-screen"],
 
     /* Browsers */
     browsers: ["Chrome"],
@@ -97,8 +95,7 @@ export default (config: KarmaConfig & KarmaConfigOptions) => {
 
     /* Configuration overrides */
     ...(process.env.GITHUB_ACTIONS || process.env.SAUCE ?
-      saucelabs(config, browsers) :
-      {}
+      saucelabs(config, browsers) : {}
     )
   })
 }
