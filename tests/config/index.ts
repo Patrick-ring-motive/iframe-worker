@@ -71,18 +71,15 @@ export function webpack(
           },
           exclude: /\/node_modules\//
         },
-        ...(config.singleRun ?
-          [
-            ({
-              test: /\.ts$/,
-              use: "istanbul-instrumenter-loader?+esModules",
-              include: path.resolve(__dirname, "../../src"),
-              exclude: path.resolve(__dirname, "../../src/worker/runtime"),
-              enforce: "post"
-            }) as WebpackRuleSetRule
-          ] :
-          []
-        )
+        ...(config.singleRun ? [
+          ({
+            test: /\.ts$/,
+            use: "istanbul-instrumenter-loader?+esModules",
+            include: path.resolve(__dirname, "../../src"),
+            exclude: path.resolve(__dirname, "../../src/worker/runtime"),
+            enforce: "post"
+          }) as WebpackRuleSetRule
+        ] : [])
       ]
     },
 
@@ -127,16 +124,13 @@ export function saucelabs(
     sauceLabs: {
       build: process.env.GITHUB_ACTIONS,
       testName: process.env.GITHUB_RUN_ID ?
-        `${process.env.GITHUB_RUN_ID}` :
-        `~ #${generate().dashed}`,
+        `${process.env.GITHUB_RUN_ID}` : `~ #${generate().dashed}`,
       recordVideo: false,
       recordScreenshots: false
     },
 
     /* Set reporters */
-    reporters: config.singleRun ?
-      ["summary", "coverage-istanbul", "saucelabs"] :
-      ["spec", "clear-screen"],
+    reporters: config.singleRun ? ["summary", "coverage-istanbul", "saucelabs"] : ["spec", "clear-screen"],
     specReporter: {
       suppressErrorSummary: true,
       suppressPassed: !config.singleRun
